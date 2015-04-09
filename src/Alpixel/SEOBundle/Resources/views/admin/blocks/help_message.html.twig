@@ -1,0 +1,10 @@
+{% if placeholders is not empty %}
+<div class='callout callout-info'>
+    Les schémas suivant sont disponibles :
+    <ul>
+        {% for placeholder,val in placeholders %}
+        <li> - {{placeholder}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

@@ -1,0 +1,40 @@
+parameters:
+    seo.sitemap.generator.class: Alpixel\Bundle\SEOBundle\Service\Generator
+    seo.sitemap.dumper.class: Alpixel\Bundle\SEOBundle\Service\Dumper
+    seo.sitemap.routing_loader.class: Alpixel\Bundle\SEOBundle\Routing\SitemapRoutingLoader
+
+services:
+    admin.seo.tags.patterns:
+        class: Alpixel\Bundle\SEOBundle\Admin\AdminMetaTagPattern
+        arguments: [~, Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern, SEOBundle:AdminMetaTagPattern]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Meta tags'}
+
+    seo.not_found_redirect:
+       class: Alpixel\Bundle\SEOBundle\Listener\NotFoundRedirectListener
+       calls:
+            - [setContainer, ["@service_container"] ]
+       tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    seo.tags:
+       class: Alpixel\Bundle\SEOBundle\Service\MetaTagService
+       arguments: [@sonata.seo.page, @annotation_reader, @doctrine]
+       tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onControllerFound, priority:-255 }
+       calls:
+            - [setContainer, ["@service_container"] ]
+
+    seo.test:
+       class: Alpixel\Bundle\SEOBundle\Service\MetaTagService
+       arguments: [@sonata.seo.page, @annotation_reader, @doctrine]
+       calls:
+            - [setContainer, ["@service_container"] ]
+
+    seo.sitemap.generator:
+        class: %seo.sitemap.generator.class%
+        arguments: ['@event_dispatcher', '@router', '@?liip_doctrine_cache.ns.seo.sitemap', '%seo.sitemap.timetolive%', '%seo.sitemap.items_by_set%']
+
+    seo.sitemap.dumper:
+        class: %seo.sitemap.dumper.class%
+        arguments: ['@event_dispatcher', '@filesystem', '%seo.sitemap.file_prefix%', '%seo.sitemap.items_by_set%']
