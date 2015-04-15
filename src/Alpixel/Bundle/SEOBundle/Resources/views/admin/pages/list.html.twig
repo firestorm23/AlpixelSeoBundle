@@ -24,6 +24,7 @@ file that was distributed with this source code.
                     {{ 'no_result'|trans({}, 'SonataAdminBundle') }}
                 </div>
             {% else %}
+                {{form_start(form)}}
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr class="sonata-ba-list-field-header">
@@ -41,15 +42,18 @@ file that was distributed with this source code.
                                 <td>{{object.className}}</td>
                                 <td>{{object.id}}</td>
                                 <td>{{object}}</td>
-                                <td>{{path(object.routeName, object.uriParameters)}}</td>
+                                <td>{{url(object.routeName, object.uriParameters)}}</td>
                                 <td>
-                                    <a href='#' class='btn btn-primary'>Modifier</a>
-                                    <a href='#' class='btn btn-primary'>Voir la page</a>
+                                    {{form_errors(form['slug_'~(object.className~object.id)|md5])}}
+                                    {{form_widget(form['slug_'~(object.className~object.id)|md5])}}
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <br />
+                <p><button type="submit" class="btn btn-large btn-success">Sauvegarder les modifications</button></p>
+                {{form_end(form)}}
             {% endif %}
         </div>
     </div>

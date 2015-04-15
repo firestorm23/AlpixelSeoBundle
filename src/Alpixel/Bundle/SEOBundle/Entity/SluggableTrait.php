@@ -14,7 +14,7 @@ trait SluggableTrait
      *
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
-    public $slug;
+    protected $slug;
 
 
     public function generateSlug() {
@@ -44,4 +44,28 @@ trait SluggableTrait
         return get_class($this);
     }
 
+
+    /**
+     * Gets the value of slug.
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Sets the value of slug.
+     *
+     * @param string $slug the slug
+     *
+     * @return self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 }

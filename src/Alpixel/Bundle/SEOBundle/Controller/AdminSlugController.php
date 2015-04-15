@@ -3,6 +3,7 @@
 namespace Alpixel\Bundle\SEOBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
+use Alpixel\Bundle\SEOBundle\Form\SlugForm;
 
 class AdminSlugController extends CRUDController
 {
@@ -33,9 +34,36 @@ class AdminSlugController extends CRUDController
             }
         }
 
+        $form          = $this->createForm(new SlugForm($objects));
+        $request = $this->get('request');
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                foreach($objects as $object) {
+                    $oldSlug = $object->getSlug();
+                    $newSlug = $form->get('slug_'.md5(get_class($object).$object->getId()))->getData();
+
+                    if($oldSlug !== $newSlug) {
+                        $object->setSlug($newSlug);
+                        $entityManager->persist($object);
+                    }
+                }
+                $entityManager->flush();
+                $this->addFlash(
+                    'sonata_flash_success',
+                    $this->admin->trans(
+                        'Modifications enregistrées'
+                    )
+                );
+            }
+        }
+
         return $this->render('SEOBundle:admin:pages/list.html.twig', array(
             'action'     => 'list',
             'objects'    => $objects,
+            'form'       => $form->createView(),
         ));
     }
 }
