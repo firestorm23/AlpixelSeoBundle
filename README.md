@@ -1,8 +1,8 @@
 
-CRONBundle
+SEOBundle
 ===========
 
-The CRONBundle provides a Symfony Bundle capable of saving cronjob and running them at given intervals.
+The SEOBundle provides a Symfony Bundle capable of handling auto generated meta tags, specific tags by route and sitemaps.
 
 
 
@@ -37,38 +37,115 @@ new Alpixel\Bundle\SEOBundle\SEOBundle(),
 php app/console doctrine:schema:update --force --dump-sql
 ```
 
-5. Start using the bundle
 
-```
-//analyze all the cron task available and register them
-php app/console cron:scan 
+## Meta tags annotation
 
-//Run the cron analyzer
-php app/console cron:run
-```
+There are 2 options for defining meta tags in your application : 
+
+### Static tags
+
+Work in progress
 
 
-## Creating a new task
+### Dynamic tags with placholders
 
-Creating your own tasks with CronBundle couldn't be easier - all you have to do is create a normal Symfony2 Command (or ContainerAwareCommand) and tag it with the @CronJob annotation, as demonstrated below:
+If you have meta tags which need to be defined from entities value, you can use the @MetaTag annotation in your controller.
+
 
 ```php
-/**
- * @CronJob("PT1H")
- */
-class DemoCommand extends Command
-{
-    public function configure()
-    {
-        // Must have a name configured
-        // ...
-    }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @Route("/paupiette")
+     * @MetaTag("paupiette", providerClass="My\Project\Entity\Paupiette", title="Paupiette page")
+     */
+    public function displayAction()
     {
-        // Your code here
-    }
-}
+
 ```
 
-The interval spec ("PT1H" in the above example) is documented on the [DateInterval](http://php.net/dateinterval) documentation page, and can be modified whenever you choose. For your CronJob to be scanned and included in future runs, you must first run app/console cron:scan - it will be scheduled to run the next time you run app/console cron:run
+After you set up the annotation, you'll need to run the following command which will register your new annotation in database.
+
+```bash
+php app/console seo:metatag:patterns
+```
+
+
+Then you will have a new entry in the back office on the "SEO" panel. You should be able to configure the meta tags pattern for the given controller.
+
+
+## Sitemap
+
+There are two options to provide the sitemap.xml with your routes :
+
+### Manual declaration
+
+For simple case, like a homepage, you can include the route in your site map with the follow annotation in your controller :
+
+```php
+    /**
+     * @Route("/", name="front_home", options={"sitemap" = true})
+    public function homepageAction()
+    {
+```
+
+### Batch declaration
+     
+    ad.sitemap:
+        class: Okazado\AdBundle\Listener\SitemapListener
+        arguments: [@doctrine, @router]
+        tags:
+            - { name: kernel.event_listener, event: 'seo.sitemap.populate', method: populateSitemap }
+            
+            <?php
+
+namespace Okazado\AccountBundle\Listener;
+
+use Alpixel\Component\SEOBundle\Service\SitemapListenerInterface;
+use Alpixel\Component\SEOBundle\Event\SitemapPopulateEvent;
+use Alpixel\Component\SEOBundle\Sitemap\Url\UrlConcrete;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Routing\RouterInterface;
+
+class SitemapListener implements SitemapListenerInterface
+{
+    protected $doctrine;
+    private $router;
+
+    public function __construct(Registry $doctrine, RouterInterface $router)
+    {
+        $this->doctrine = $doctrine;
+        $this->router   = $router;
+    }
+
+    public function populateSitemap(SitemapPopulateEvent $event)
+    {
+        $section = $event->getSection();
+        if (is_null($section) || $section == 'account') {
+            $accounts = $this->doctrine
+                            ->getManager()
+                            ->getRepository('AccountBundle:User')
+                            ->findAllActive()
+                        ;
+
+            foreach ($accounts as $user) {
+                $url = $this->router->generate('front_account', array('user'=>$user->getUsernameCanonical()), true);
+                $event->getGenerator()->addUrl(
+                    new UrlConcrete(
+                        $url,
+                        new \DateTime(),
+                        UrlConcrete::CHANGEFREQ_MONTHLY,
+                        .7
+                    ),
+                    'account'
+                );
+            }
+        }
+    }
+}
+
+
+
+## Commands
+
+    # run "php #{current_path}/app/console seo:metatag:patterns"
+    # run "php #{current_path}/app/console seo:sitemap"
