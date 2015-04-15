@@ -37,6 +37,12 @@ new Alpixel\Bundle\SEOBundle\SEOBundle(),
 php app/console doctrine:schema:update --force --dump-sql
 ```
 
+5. Update deploy.rb
+
+```ruby
+    run "php #{current_path}/app/console seo:metatag:patterns"
+    run "php #{current_path}/app/console seo:sitemap"
+```
 
 ## Meta tags annotation
 
@@ -89,14 +95,24 @@ For simple case, like a homepage, you can include the route in your site map wit
 ```
 
 ### Batch declaration
-     
+
+In more complexe case, you'll need to setup a listener which will be in charge to provide your sitemap.xml.
+
+First you start to declare a new listener in the services.yml of your bundle (example from OKAZADO project) :
+
+```yaml  
+services:   
     ad.sitemap:
         class: Okazado\AdBundle\Listener\SitemapListener
         arguments: [@doctrine, @router]
         tags:
             - { name: kernel.event_listener, event: 'seo.sitemap.populate', method: populateSitemap }
-            
-            <?php
+```
+
+Then you have to setup the listener. This is an example of a setup on OKAZADO :
+
+```php      
+<?php
 
 namespace Okazado\AccountBundle\Listener;
 
@@ -142,10 +158,11 @@ class SitemapListener implements SitemapListenerInterface
         }
     }
 }
+```
 
 
 
-## Commands
+## Avalaible commands
 
-    # run "php #{current_path}/app/console seo:metatag:patterns"
-    # run "php #{current_path}/app/console seo:sitemap"
+php app/console seo:metatag:patterns
+php app/console seo:sitemap
