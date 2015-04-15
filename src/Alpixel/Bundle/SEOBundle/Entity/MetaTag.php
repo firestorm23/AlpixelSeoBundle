@@ -26,7 +26,7 @@ class MetaTag extends BaseMetaTag
     /**
      * @var integer
      *
-     * @ORM\Column(name="url", type="text", nullable=false, unique=true)
+     * @ORM\Column(name="url", type="text", nullable=false)
      */
     protected $url;
 
