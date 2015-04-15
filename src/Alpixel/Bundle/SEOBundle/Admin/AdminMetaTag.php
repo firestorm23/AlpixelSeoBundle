@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-class AdminMetaTagPattern extends Admin
+class AdminMetaTag extends Admin
 {
     protected $datagridValues = array(
         '_page'       => 1,
@@ -19,7 +19,6 @@ class AdminMetaTagPattern extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         // to remove a single route
-        $collection->remove('create');
         $collection->remove('show');
     }
 
@@ -35,6 +34,9 @@ class AdminMetaTagPattern extends Admin
             ->add('title', null, array(
                 'label' => 'Titre',
             ))
+            ->add('url', null, array(
+                'label' => 'URL',
+            ))
         ;
     }
 
@@ -49,6 +51,9 @@ class AdminMetaTagPattern extends Admin
             ))
             ->addIdentifier('title', null, array(
                 'label' => 'Titre',
+            ))
+            ->add('url', null, array(
+                'label' => 'URL',
             ))
             ->add('metaTitle', null, array(
                 'label' => 'Meta : Titre',
@@ -67,14 +72,13 @@ class AdminMetaTagPattern extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $container = $this->getConfigurationPool()->getContainer();
-        $pattern   = $this->getSubject();
-
-        $patterns  = $container->get('seo.tags')->getPlaceholders($pattern);
-        $help      = $container->get('templating')->render('SEOBundle:admin:blocks/help_message.html.twig', array('placeholders' => $patterns));
-
         $formMapper
-            ->with('Edition du modèle de metatags : '.$pattern->getTitle())
+            ->add('title', null, array(
+                'label' => 'Titre',
+            ))
+            ->add('url', 'text', array(
+                'label' => 'URL',
+            ))
             ->add('metaTitle', null, array(
                 'label' => 'Meta : Titre',
             ))
@@ -85,9 +89,8 @@ class AdminMetaTagPattern extends Admin
                 'label' => 'Meta : mots clefs',
             ))
             ->setHelps(array(
-                'metaTitle' => $help,
+                'url' => 'Doit être de la forme /mon-url (pas de http:// ou www.)',
             ))
-            ->end()
         ;
     }
 }

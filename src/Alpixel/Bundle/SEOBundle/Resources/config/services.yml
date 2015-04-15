@@ -8,7 +8,13 @@ services:
         class: Alpixel\Bundle\SEOBundle\Admin\AdminMetaTagPattern
         arguments: [~, Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern, SEOBundle:AdminMetaTagPattern]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Meta tags'}
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Meta tags : optimisations automatiques'}
+
+    admin.seo.tags:
+        class: Alpixel\Bundle\SEOBundle\Admin\AdminMetaTag
+        arguments: [~, Alpixel\Bundle\SEOBundle\Entity\MetaTag, SEOBundle:AdminMetaTag]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Meta tags : optimisations manuelles'}
 
     seo.not_found_redirect:
        class: Alpixel\Bundle\SEOBundle\Listener\NotFoundRedirectListener

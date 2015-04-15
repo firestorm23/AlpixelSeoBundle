@@ -37,37 +37,94 @@ class MetaTagService
 
         $method      = new \ReflectionMethod($controllerData[0], $controllerData[1]);
 
-        if (!$annotations = $this->annotationReader->getMethodAnnotations($method)) {
-            return;
+
+        //First we check for an automatic optim
+        $annotations = $this->annotationReader->getMethodAnnotations($method);
+
+        if(!empty($annotations)) {
+            foreach ($annotations as $annotation) {
+                if ($annotation instanceof SEOAnnotation\MetaTag) {
+                    $request    = $controllerData[0]->getRequest();
+                    $controller = $request->get('_controller');
+                    $object     = $request->get($annotation->value);
+
+                    if(empty($object))
+                        continue;
+
+                    $class      = new \ReflectionClass($object);
+
+                    $exists = $this
+                                ->doctrine
+                                ->getManager()
+                                ->getRepository('SEOBundle:MetaTagPattern')
+                                ->findOneBy(array(
+                                    'controller'    => $controller,
+                                    'entityClass'   => $class->getName(),
+                                ));
+
+                    if (!is_null($exists)) {
+
+                        $title = $this->getMeta('title', $object);
+                        if($title !== '') {
+                            $this->sonataSEO
+                                ->setTitle($title)
+                            ;
+                        }
+
+                        $meta = $this->getMeta('description', $object);
+                        if($meta !== '') {
+                            $this->sonataSEO
+                                ->addMeta('name', 'description', $meta)
+                            ;
+                        }
+
+                        $meta = $this->getMeta('keywords', $object);
+                        if($meta !== '') {
+                            $this->sonataSEO
+                                ->addMeta('name', 'keywords', $meta)
+                            ;
+                        }
+
+                    }
+                }
+            }
         }
 
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof SEOAnnotation\MetaTag) {
-                $request    = $controllerData[0]->getRequest();
-                $controller = $request->get('_controller');
-                $object     = $request->get($annotation->value);
 
-                if(empty($object))
-                    continue;
+        //Then we check an override with a manual optimisation
+        $path = $event->getRequest()->getPathinfo();
 
-                $class      = new \ReflectionClass($object);
+        $optim = $this
+                    ->doctrine
+                    ->getManager()
+                    ->getRepository('SEOBundle:MetaTag')
+                    ->findOneBy(array(
+                        'url'       => $path,
+                    ));
 
-                $exists = $this
-                            ->doctrine
-                            ->getManager()
-                            ->getRepository('SEOBundle:MetaTagPattern')
-                            ->findOneBy(array(
-                                'controller'    => $controller,
-                                'entityClass'   => $class->getName(),
-                            ));
+        if($optim !== null) {
+            if($optim->getMetaTitle() !== null)
+            {
+                $this
+                    ->sonataSEO
+                    ->setTitle($optim->getMetaTitle())
+                ;
+            }
 
-                if (!is_null($exists)) {
-                    $this->sonataSEO
-                        ->setTitle($this->getMeta('title', $object))
-                        ->addMeta('name', 'description', $this->getMeta('description', $object))
-                        ->addMeta('name', 'keywords', $this->getMeta('keywords', $object))
-                    ;
-                }
+            if($optim->getMetaDescription() !== null)
+            {
+                $this
+                    ->sonataSEO
+                    ->addMeta('name', 'description', $optim->getMetaDescription())
+                ;
+            }
+
+            if($optim->getMetaKeywords() !== null)
+            {
+                $this
+                    ->sonataSEO
+                    ->addMeta('name', 'keywords', $optim->getMetaKeywords())
+                ;
             }
         }
     }
