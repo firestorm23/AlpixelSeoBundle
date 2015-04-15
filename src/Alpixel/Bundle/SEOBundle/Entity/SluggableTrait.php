@@ -17,8 +17,7 @@ trait SluggableTrait
     public $slug;
 
 
-    public function generateSlug()
-    {
+    public function generateSlug() {
         if (empty($this->slug)) {
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->title);
@@ -30,17 +29,19 @@ trait SluggableTrait
     /**
      * @ORM\PrePersist
      */
-    public function persistSlug()
-    {
+    public function persistSlug() {
         $this->generateSlug();
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function updateSlug(PreUpdateEventArgs $eventArgs)
-    {
+    public function updateSlug(PreUpdateEventArgs $eventArgs) {
         $this->generateSlug();
+    }
+
+    public function getClassName() {
+        return get_class($this);
     }
 
 }

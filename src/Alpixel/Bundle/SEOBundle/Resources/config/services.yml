@@ -16,6 +16,12 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Meta tags : optimisations manuelles'}
 
+    admin.seo.slugs:
+        class: Alpixel\Bundle\SEOBundle\Admin\AdminSlug
+        arguments: [~, ~, SEOBundle:AdminSlug]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Slugs'}
+
     seo.not_found_redirect:
        class: Alpixel\Bundle\SEOBundle\Listener\NotFoundRedirectListener
        calls:
