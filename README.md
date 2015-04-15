@@ -11,7 +11,7 @@ The SEOBundle provides a Symfony Bundle capable of handling auto generated meta 
 1. Install the package
 
 ```bash
-composer require 'alpixel/seobundle:~1.0'
+composer require 'alpixel/seobundle:1.*'
 ```
 
 2. Update routing.yml
@@ -20,7 +20,7 @@ composer require 'alpixel/seobundle:~1.0'
 seo:
     resource: "@SEOBundle/Controller/"
     type:     annotation
-    prefix:   /    
+    prefix:   /
 ```
 
 
@@ -44,9 +44,34 @@ php app/console doctrine:schema:update --force --dump-sql
     run "php #{current_path}/app/console seo:sitemap"
 ```
 
+
+6. Update config.yml
+
+Add the default value in the sonata_seo bundle and the base_url needed for the sitemap :
+
+```yaml
+sonata_seo:
+    page:
+        title: "My default title"
+        metas:
+            name:
+                description: "My default description"
+
+seo:
+    sitemap_base_url: https://www.website.com
+```
+
+7. Add the following declaration in your base.html.twig
+
+```twig
+    {{ sonata_seo_title() }}
+    {{ sonata_seo_metadatas() }}
+    {{ sonata_seo_link_canonical() }}
+```
+
 ## Meta tags annotation
 
-There are 2 options for defining meta tags in your application : 
+There are 2 options for defining meta tags in your application :
 
 ### Static tags
 
@@ -78,6 +103,23 @@ php app/console seo:metatag:patterns
 
 Then you will have a new entry in the back office on the "SEO" panel. You should be able to configure the meta tags pattern for the given controller.
 
+The impacted entity should provide placeholders.
+First, it should implements the Alpixel\Bundle\SEOBundle\Entity\MetaTagPlaceholderInterface
+Then you have to implement the getPlaceholders() method in your entity. This is an example :
+
+```php
+use Alpixel\Bundle\SEOBundle\Entity\MetaTagPlaceholderInterface;
+class News implements MetaTagPlaceholderInterface
+{
+    public function getPlaceholders() {
+        return array(
+            "[news:title]"  => $this->title,
+            "[news:resume]" => substr(strip_tags($this->content), 0, 150)
+        );
+    }
+}
+```
+
 
 ## Sitemap
 
@@ -100,8 +142,8 @@ In more complexe case, you'll need to setup a listener which will be in charge t
 
 First you start to declare a new listener in the services.yml of your bundle (example from OKAZADO project) :
 
-```yaml  
-services:   
+```yaml
+services:
     ad.sitemap:
         class: Okazado\AdBundle\Listener\SitemapListener
         arguments: [@doctrine, @router]
@@ -111,7 +153,7 @@ services:
 
 Then you have to setup the listener. This is an example of a setup on OKAZADO :
 
-```php      
+```php
 <?php
 
 namespace Okazado\AccountBundle\Listener;
