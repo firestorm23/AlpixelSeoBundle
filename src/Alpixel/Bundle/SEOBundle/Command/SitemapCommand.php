@@ -49,11 +49,11 @@ class SitemapCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // $targetDir  = rtrim($input->getArgument('target'), '/');
-        $targetDir = 'web';
 
         $container  = $this->getContainer();
-
         $dumper     = $container->get('seo.sitemap.dumper');
+
+        $targetDir = $container->getParameter('kernel.root_dir').'/../web';
 
         $baseUrl    = $container->getParameter('seo.sitemap.base_url');
         $baseUrl    = rtrim($baseUrl, '/').'/';
