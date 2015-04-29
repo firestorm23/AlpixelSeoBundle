@@ -51,6 +51,12 @@ file that was distributed with this source code.
                         {% endfor %}
                     </tbody>
                 </table>
+                <br>
+                <div>
+                    {% set current_route = app.request.attributes.get('_route') %}
+                    <a href="{{ path(current_route, {'page':  previous}) }}" class="btn btn-primary">Précédent</a>&nbsp;|&nbsp;
+                    <a href="{{ path(current_route, {'page':  next}) }}" class="btn btn-primary">Suivant</a>
+                </div>
                 <br />
                 <p><button type="submit" class="btn btn-large btn-success">Sauvegarder les modifications</button></p>
                 {{form_end(form)}}
