@@ -85,12 +85,10 @@ class AdminSlugController extends CRUDController
         }
 
         return $this->render('SEOBundle:admin:pages/list.html.twig', array(
-            'action'   => 'list',
-            'objects'  => $objects,
-            'form'     => $form->createView(),
-            'page'     => $page,
-            'previous' => $previous,
-            'next'     => $next,
+            'action'     => 'list',
+            'objects'    => $objects,
+            'form'       => $form->createView(),
+            'pagination' => array($previous, $next),
         ));
     }
 }
