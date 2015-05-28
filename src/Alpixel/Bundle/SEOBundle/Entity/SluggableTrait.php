@@ -5,7 +5,9 @@ use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-
+/**
+  * @deprecated should be removed in 2.0.  you should use gedmo/sluggable and the sluggableInterface
+  **/
 trait SluggableTrait
 {
 
