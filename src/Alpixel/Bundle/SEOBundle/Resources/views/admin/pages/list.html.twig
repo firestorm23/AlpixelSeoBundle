@@ -1,0 +1,68 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% block actions %}{% endblock %}
+
+{% block tab_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': admin_pool.getTemplate('tab_menu_template')}, 'twig') }}{% endblock %}
+
+
+{% block list_table %}
+    <div class="box box-primary">
+        <div class="box-body table-responsive no-padding">
+            {% if objects is empty %}
+                <div class="callout callout-info">
+                    {{ 'no_result'|trans({}, 'SonataAdminBundle') }}
+                </div>
+            {% else %}
+                {{form_start(form)}}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr class="sonata-ba-list-field-header">
+                            <th>Objet</th>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for object in objects %}
+                            <tr>
+                                <td>{{object.className}}</td>
+                                <td>{{object.id}}</td>
+                                <td>{{object}}</td>
+                                <td>{{url(object.routeName, object.uriParameters)}}</td>
+                                <td>
+                                    {{form_errors(form['slug_'~(object.className~object.id)|md5])}}
+                                    {{form_widget(form['slug_'~(object.className~object.id)|md5])}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <div>
+                    {% set current_route = app.request.attributes.get('_route') %}
+                    <a href="{{ path(current_route, {'page':  pagination.previous}) }}" class="btn btn-primary">Précédent</a>&nbsp;|&nbsp;
+                    <a href="{{ path(current_route, {'page':  pagination.next}) }}" class="btn btn-primary">Suivant</a>
+                </div>
+                <br />
+                <p><button type="submit" class="btn btn-large btn-success">Sauvegarder les modifications</button></p>
+                {{form_end(form)}}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block list_filters %}{% endblock %}
