@@ -1,26 +1,29 @@
 <?php
 namespace Alpixel\Bundle\SEOBundle\Service;
 
-use Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern;
 use Alpixel\Bundle\SEOBundle\Annotation as SEOAnnotation;
+use Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern;
+use Alpixel\Bundle\SEOBundle\Entity\MetaTagPlaceholderInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Annotations\FileCacheReader;
 use Sonata\SeoBundle\Seo\SeoPage;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Alpixel\Bundle\SEOBundle\Entity\MetaTagPlaceholderInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class MetaTagService
 {
     protected $doctrine;
     protected $sonataSEO;
     protected $annotationReader;
+    protected $securityContext;
 
-    public function __construct(SeoPage $page, FileCacheReader $reader, Registry $doctrine)
+    public function __construct(SeoPage $page, FileCacheReader $reader, Registry $doctrine, SecurityContext $securityContext)
     {
         $this->annotationReader = $reader;
         $this->doctrine         = $doctrine;
         $this->sonataSEO        = $page;
+        $this->securityContext = $securityContext;
     }
 
     public function onControllerFound(FilterControllerEvent $event)
@@ -93,6 +96,8 @@ class MetaTagService
 
         //Then we check an override with a manual optimisation
         $path = $event->getRequest()->getPathinfo();
+        if(preg_match('@\.[js|css]@', $path))
+            return;
 
         $optim = $this
                     ->doctrine
