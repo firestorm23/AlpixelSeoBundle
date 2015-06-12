@@ -18,7 +18,7 @@ class MetaTagService
     protected $annotationReader;
     protected $securityContext;
 
-    public function __construct(SeoPage $page, FileCacheReader $reader, Registry $doctrine, SecurityContext $securityContext)
+    public function __construct(SeoPage $page, FileCacheReader $reader, Registry $doctrine, SecurityContext $securityContext = null)
     {
         $this->annotationReader = $reader;
         $this->doctrine         = $doctrine;
