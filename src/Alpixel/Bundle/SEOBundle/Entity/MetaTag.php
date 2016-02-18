@@ -3,14 +3,12 @@
 namespace Alpixel\Bundle\SEOBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * MetaTag.
  *
  * @ORM\Table(name="seo_metatag")
  * @ORM\Entity(repositoryClass="Alpixel\Bundle\SEOBundle\Entity\Repository\MetaTagRepository")
- * @Serializer\ExclusionPolicy("all")
  */
 class MetaTag extends BaseMetaTag
 {
