@@ -5,7 +5,7 @@ use Alpixel\Bundle\SEOBundle\Annotation as SEOAnnotation;
 use Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern;
 use Alpixel\Bundle\SEOBundle\Entity\MetaTagPlaceholderInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Common\Annotations\FileCacheReader;
+use Doctrine\Common\Annotations\Reader;
 use Sonata\SeoBundle\Seo\SeoPage;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -18,7 +18,7 @@ class MetaTagService
     protected $annotationReader;
     protected $securityContext;
 
-    public function __construct(SeoPage $page, FileCacheReader $reader, Registry $doctrine, SecurityContext $securityContext = null)
+    public function __construct(SeoPage $page, Reader $reader, Registry $doctrine, SecurityContext $securityContext = null)
     {
         $this->annotationReader = $reader;
         $this->doctrine         = $doctrine;
