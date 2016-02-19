@@ -11,7 +11,7 @@ The SEOBundle provides a Symfony Bundle capable of handling auto generated meta 
 1. Install the package
 
 ```bash
-composer require 'alpixel/seobundle:1.*'
+composer require 'alpixel/seobundle:~2.0'
 ```
 
 2. Update routing.yml
