@@ -1,26 +1,26 @@
 <?php
+
 namespace Alpixel\Bundle\SEOBundle\Command;
 
+use Alpixel\Bundle\SEOBundle\Annotation as SEOAnnotation;
+use Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern;
-use Alpixel\Bundle\SEOBundle\Annotation as SEOAnnotation;
 
 class MetaTagCommand extends ContainerAwareCommand
 {
     public function configure()
     {
         $this
-            ->setName("seo:metatag:patterns")
-            ->setDescription("Generate patterns in database")
-         ;
+            ->setName('seo:metatag:patterns')
+            ->setDescription('Generate patterns in database');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $routes         = $this->getContainer()->get('router')->getRouteCollection()->all();
-        $entityManager  = $this->getContainer()->get('doctrine')->getManager();
+        $routes = $this->getContainer()->get('router')->getRouteCollection()->all();
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
         foreach ($routes as $route) {
             $defaults = $route->getDefaults();
@@ -44,10 +44,10 @@ class MetaTagCommand extends ContainerAwareCommand
                 if ($annotation instanceof SEOAnnotation\MetaTag) {
                     $exists = $entityManager
                                 ->getRepository('SEOBundle:MetaTagPattern')
-                                ->findOneBy(array(
+                                ->findOneBy([
                                     'controller'   => $controller,
                                     'entityClass'  => $annotation->providerClass,
-                                ));
+                                ]);
 
                     if (is_null($exists)) {
                         $pattern = new MetaTagPattern();

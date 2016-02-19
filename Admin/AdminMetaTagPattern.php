@@ -10,11 +10,11 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class AdminMetaTagPattern extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page'       => 1,
         '_sort_by'    => 'title',
         '_sort_order' => 'ASC',
-    );
+    ];
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -28,13 +28,12 @@ class AdminMetaTagPattern extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id', null, array(
+            ->add('id', null, [
                 'label' => 'ID',
-            ))
-            ->add('title', null, array(
+            ])
+            ->add('title', null, [
                 'label' => 'Titre',
-            ))
-        ;
+            ]);
     }
 
     /**
@@ -43,22 +42,21 @@ class AdminMetaTagPattern extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, array(
+            ->addIdentifier('id', null, [
                 'label' => 'ID',
-            ))
-            ->addIdentifier('title', null, array(
+            ])
+            ->addIdentifier('title', null, [
                 'label' => 'Titre',
-            ))
-            ->add('metaTitle', null, array(
+            ])
+            ->add('metaTitle', null, [
                 'label' => 'Meta : Titre',
-            ))
-            ->add('metaDescription', null, array(
+            ])
+            ->add('metaDescription', null, [
                 'label' => 'Meta : Description',
-            ))
-            ->add('metaKeywords', null, array(
+            ])
+            ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
-            ))
-        ;
+            ]);
     }
 
     /**
@@ -67,26 +65,25 @@ class AdminMetaTagPattern extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $container = $this->getConfigurationPool()->getContainer();
-        $pattern   = $this->getSubject();
+        $pattern = $this->getSubject();
 
-        $patterns  = $container->get('seo.tags')->getPlaceholders($pattern);
-        $help      = $container->get('templating')->render('SEOBundle:admin:blocks/help_message.html.twig', array('placeholders' => $patterns));
+        $patterns = $container->get('seo.tags')->getPlaceholders($pattern);
+        $help = $container->get('templating')->render('SEOBundle:admin:blocks/help_message.html.twig', ['placeholders' => $patterns]);
 
         $formMapper
             ->with('Edition du modèle de metatags : '.$pattern->getTitle())
-            ->add('metaTitle', null, array(
+            ->add('metaTitle', null, [
                 'label' => 'Meta : Titre',
-            ))
-            ->add('metaDescription', null, array(
+            ])
+            ->add('metaDescription', null, [
                 'label' => 'Meta : Description',
-            ))
-            ->add('metaKeywords', null, array(
+            ])
+            ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
-            ))
-            ->setHelps(array(
+            ])
+            ->setHelps([
                 'metaTitle' => $help,
-            ))
-            ->end()
-        ;
+            ])
+            ->end();
     }
 }

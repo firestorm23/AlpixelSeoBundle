@@ -16,7 +16,7 @@ class Urlset extends XmlConstraint
     protected $loc;
     protected $lastmod;
     protected $urlsXml = '';
-    protected $customNamespaces = array();
+    protected $customNamespaces = [];
 
     /**
      * @param string    $loc

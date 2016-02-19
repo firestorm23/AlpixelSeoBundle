@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 
 use Alpixel\Bundle\SEOBundleSitemap\Utils;
@@ -43,7 +42,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     const LIVE_NO = 'no';
     const TAG_ITEMS_LIMIT = 32;
 
-    protected $customNamespaces = array('video' => 'http://www.google.com/schemas/sitemap-video/1.1');
+    protected $customNamespaces = ['video' => 'http://www.google.com/schemas/sitemap-video/1.1'];
     protected $thumbnail_loc;
     protected $title;
     protected $description;
@@ -71,20 +70,20 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $publication_date;
     protected $family_friendly;
     protected $category;
-    protected $restriction_allow = array();
-    protected $restriction_deny = array();
+    protected $restriction_allow = [];
+    protected $restriction_deny = [];
     protected $gallery_loc;
     protected $gallery_loc_title;
     protected $requires_subscription;
     protected $uploader;
     protected $uploader_info;
-    protected $platforms = array();
+    protected $platforms = [];
     protected $platform_relationship;
     protected $live;
     //multiple prices can be added, see self::addPrice()
-    protected $prices = array();
+    protected $prices = [];
     //multiple tags can be added, see self::addTag()
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * Decorate url with a video.
@@ -97,7 +96,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @throws \Exception
      */
-    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = array())
+    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = [])
     {
         foreach ($parameters as $key => $param) {
             $method = Utils::getSetMethod($this, $key);
@@ -166,7 +165,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     public function setPlayerLocAllowEmbed($player_loc_allow_embed)
     {
-        if (!in_array($player_loc_allow_embed, array(self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO))) {
+        if (!in_array($player_loc_allow_embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
             throw new \Exception(sprintf('The parameter %s must be a valid player_loc_allow_embed.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $player_loc_allow_embed));
         }
         $this->player_loc_allow_embed = $player_loc_allow_embed;
@@ -258,7 +257,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
             $family_friendly = self::FAMILY_FRIENDLY_YES;
         }
 
-        if (!in_array($family_friendly, array(self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO))) {
+        if (!in_array($family_friendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
             throw new \Exception(sprintf('The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $family_friendly));
         }
 
@@ -278,7 +277,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         return $this;
     }
 
-    public function setRestrictionAllow(array $countries = array())
+    public function setRestrictionAllow(array $countries = [])
     {
         $this->restriction_allow = $countries;
 
@@ -290,7 +289,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         return $this->restriction_allow;
     }
 
-    public function setRestrictionDeny(array $countries = array())
+    public function setRestrictionDeny(array $countries = [])
     {
         $this->restriction_deny = $countries;
 
@@ -318,7 +317,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     public function setRequiresSubscription($requires_subscription)
     {
-        if (!in_array($requires_subscription, array(self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO))) {
+        if (!in_array($requires_subscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
             throw new \Exception(sprintf('The parameter %s must be a valid requires_subscription.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $requires_subscription));
         }
 
@@ -462,12 +461,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function addPrice($amount, $currency, $type = null, $resolution = null)
     {
-        $this->prices[] = array(
-            'amount' => $amount,
-            'currency' => $currency,
-            'type' => $type,
+        $this->prices[] = [
+            'amount'     => $amount,
+            'currency'   => $currency,
+            'type'       => $type,
             'resolution' => $resolution,
-        );
+        ];
 
         return $this;
     }
@@ -514,7 +513,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         // required fields
         $videoXml .= '<video:thumbnail_loc>'.Utils::encode($this->getThumbnailLoc()).'</video:thumbnail_loc>';
 
-        foreach (array('title', 'description') as $paramName) {
+        foreach (['title', 'description'] as $paramName) {
             $videoXml .= '<video:'.$paramName.'>'.Utils::render($this->{Utils::getGetMethod($this, $paramName)}()).'</video:'.$paramName.'>';
         }
         //----------------------
@@ -526,7 +525,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         if ($this->getContentLoc()) {
             $videoXml .= '<video:content_loc>'.Utils::encode($this->getContentLoc()).'</video:content_loc>';
         }
-        foreach (array('duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live') as $paramName) {
+        foreach (['duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live'] as $paramName) {
             $getMethod = Utils::getGetMethod($this, $paramName);
             if ($this->$getMethod()) {
                 $videoXml .= '<video:'.$paramName.'>'.$this->$getMethod().'</video:'.$paramName.'>';
@@ -535,7 +534,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         //----------------------
         //----------------------
         // date based optionnal fields
-        foreach (array('expiration_date', 'publication_date') as $paramName) {
+        foreach (['expiration_date', 'publication_date'] as $paramName) {
             $getMethod = Utils::getGetMethod($this, $paramName);
             if ($this->$getMethod()) {
                 $videoXml .= '<video:'.$paramName.'>'.$this->$getMethod()->format('c').'</video:'.$paramName.'>';

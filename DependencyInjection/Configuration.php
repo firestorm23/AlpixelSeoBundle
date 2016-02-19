@@ -44,8 +44,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('sitemap_route_annotation_listener')
                     ->defaultTrue()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

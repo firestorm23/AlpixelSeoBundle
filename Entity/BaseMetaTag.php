@@ -4,33 +4,31 @@ namespace Alpixel\Bundle\SEOBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 abstract class BaseMetaTag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
     protected $title;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
      */
     protected $metaTitle;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
      */
     protected $metaDescription;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
      */
@@ -41,11 +39,10 @@ abstract class BaseMetaTag
         return $this->title;
     }
 
-
     /**
      * Gets the value of metaTitle.
      *
-     * @return integer
+     * @return int
      */
     public function getMetaTitle()
     {
@@ -55,7 +52,7 @@ abstract class BaseMetaTag
     /**
      * Sets the value of metaTitle.
      *
-     * @param integer $metaTitle the meta title
+     * @param int $metaTitle the meta title
      *
      * @return self
      */
@@ -69,7 +66,7 @@ abstract class BaseMetaTag
     /**
      * Gets the value of metaDescription.
      *
-     * @return integer
+     * @return int
      */
     public function getMetaDescription()
     {
@@ -79,7 +76,7 @@ abstract class BaseMetaTag
     /**
      * Sets the value of metaDescription.
      *
-     * @param integer $metaDescription the meta description
+     * @param int $metaDescription the meta description
      *
      * @return self
      */
@@ -93,7 +90,7 @@ abstract class BaseMetaTag
     /**
      * Gets the value of metaKeywords.
      *
-     * @return integer
+     * @return int
      */
     public function getMetaKeywords()
     {
@@ -103,7 +100,7 @@ abstract class BaseMetaTag
     /**
      * Sets the value of metaKeywords.
      *
-     * @param integer $metaKeywords the meta keywords
+     * @param int $metaKeywords the meta keywords
      *
      * @return self
      */
@@ -117,7 +114,7 @@ abstract class BaseMetaTag
     /**
      * Gets the value of title.
      *
-     * @return integer
+     * @return int
      */
     public function getTitle()
     {
@@ -127,7 +124,7 @@ abstract class BaseMetaTag
     /**
      * Sets the value of title.
      *
-     * @param integer $title the title
+     * @param int $title the title
      *
      * @return self
      */
@@ -137,5 +134,4 @@ abstract class BaseMetaTag
 
         return $this;
     }
-
 }

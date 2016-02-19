@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\EventListener;
 
 use Alpixel\Bundle\SEOBundleEvent\SitemapPopulateEvent;
@@ -106,11 +105,11 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             throw new \InvalidArgumentException('the sitemap option must be "true" or an array of parameters');
         }
 
-        $options = array(
-            'priority' => 1,
+        $options = [
+            'priority'   => 1,
             'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => new \DateTime(),
-        );
+            'lastmod'    => new \DateTime(),
+        ];
 
         if (is_array($option)) {
             if (isset($option['lastmod'])) {
@@ -138,9 +137,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
      * @param $name
      * @param $options
      *
-     * @return UrlConcrete
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return UrlConcrete
      */
     private function getUrlConcrete($name, $options)
     {
@@ -167,15 +166,15 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     /**
      * @param $name
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     private function getRouteUri($name)
     {
         // does the route need parameters? if so, we can't add it
         try {
-            return $this->router->generate($name, array(), true);
+            return $this->router->generate($name, [], true);
         } catch (MissingMandatoryParametersException $e) {
             throw new \InvalidArgumentException(
                 sprintf(

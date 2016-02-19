@@ -1,16 +1,16 @@
 <?php
+
 namespace Alpixel\Bundle\SEOBundle\Entity;
 
 use Cocur\Slugify\Slugify;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
-  * @deprecated should be removed in 2.0.  you should use gedmo/sluggable and the sluggableInterface
-  **/
+ * @deprecated should be removed in 2.0.  you should use gedmo/sluggable and the sluggableInterface
+ **/
 trait SluggableTrait
 {
-
     /**
      * @var string
      *
@@ -18,8 +18,8 @@ trait SluggableTrait
      */
     protected $slug;
 
-
-    public function generateSlug() {
+    public function generateSlug()
+    {
         if (empty($this->slug)) {
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->title);
@@ -31,21 +31,23 @@ trait SluggableTrait
     /**
      * @ORM\PrePersist
      */
-    public function persistSlug() {
+    public function persistSlug()
+    {
         $this->generateSlug();
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function updateSlug(PreUpdateEventArgs $eventArgs) {
+    public function updateSlug(PreUpdateEventArgs $eventArgs)
+    {
         $this->generateSlug();
     }
 
-    public function getClassName() {
+    public function getClassName()
+    {
         return get_class($this);
     }
-
 
     /**
      * Gets the value of slug.
