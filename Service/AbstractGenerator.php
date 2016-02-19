@@ -28,7 +28,7 @@ abstract class AbstractGenerator
     /**
      * @var Sitemap\Urlset[]|Sitemap\DumpingUrlset[]
      */
-    protected $urlsets = array();
+    protected $urlsets = [];
 
     /**
      * The maximum number of item generated in a sitemap.

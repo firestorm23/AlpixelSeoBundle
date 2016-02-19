@@ -1,11 +1,11 @@
 <?php
+
 namespace Alpixel\Bundle\SEOBundle\Listener;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NotFoundRedirectListener
 {
@@ -15,7 +15,7 @@ class NotFoundRedirectListener
     {
         $hotfix = explode('.', $event->getRequest()->getPathInfo());
 
-        if (!in_array(end($hotfix), array('js', 'css')) && $event->getException() instanceof NotFoundHttpException && !in_array($this->container->getParameter('kernel.environment'), array('dev', 'test'))) {
+        if (!in_array(end($hotfix), ['js', 'css']) && $event->getException() instanceof NotFoundHttpException && !in_array($this->container->getParameter('kernel.environment'), ['dev', 'test'])) {
             $response = new RedirectResponse($this->container->get('router')->generate('front_404'));
             $event->setResponse($response);
         }

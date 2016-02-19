@@ -10,11 +10,11 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class AdminMetaTag extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page'       => 1,
         '_sort_by'    => 'title',
         '_sort_order' => 'ASC',
-    );
+    ];
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -28,16 +28,15 @@ class AdminMetaTag extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id', null, array(
+            ->add('id', null, [
                 'label' => 'ID',
-            ))
-            ->add('title', null, array(
+            ])
+            ->add('title', null, [
                 'label' => 'Titre',
-            ))
-            ->add('url', null, array(
+            ])
+            ->add('url', null, [
                 'label' => 'URL',
-            ))
-        ;
+            ]);
     }
 
     /**
@@ -46,25 +45,24 @@ class AdminMetaTag extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, array(
+            ->addIdentifier('id', null, [
                 'label' => 'ID',
-            ))
-            ->addIdentifier('title', null, array(
+            ])
+            ->addIdentifier('title', null, [
                 'label' => 'Titre',
-            ))
-            ->add('url', null, array(
+            ])
+            ->add('url', null, [
                 'label' => 'URL',
-            ))
-            ->add('metaTitle', null, array(
+            ])
+            ->add('metaTitle', null, [
                 'label' => 'Meta : Titre',
-            ))
-            ->add('metaDescription', null, array(
+            ])
+            ->add('metaDescription', null, [
                 'label' => 'Meta : Description',
-            ))
-            ->add('metaKeywords', null, array(
+            ])
+            ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
-            ))
-        ;
+            ]);
     }
 
     /**
@@ -73,24 +71,23 @@ class AdminMetaTag extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('title', null, array(
+            ->add('title', null, [
                 'label' => 'Titre',
-            ))
-            ->add('url', 'text', array(
+            ])
+            ->add('url', 'text', [
                 'label' => 'URL',
-            ))
-            ->add('metaTitle', null, array(
+            ])
+            ->add('metaTitle', null, [
                 'label' => 'Meta : Titre',
-            ))
-            ->add('metaDescription', null, array(
+            ])
+            ->add('metaDescription', null, [
                 'label' => 'Meta : Description',
-            ))
-            ->add('metaKeywords', null, array(
+            ])
+            ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
-            ))
-            ->setHelps(array(
+            ])
+            ->setHelps([
                 'url' => 'Doit être de la forme /mon-url (pas de http:// ou www.)',
-            ))
-        ;
+            ]);
     }
 }

@@ -1,9 +1,10 @@
 <?php
+
 namespace Alpixel\Bundle\SEOBundleDependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Alpixel\Bundle\SEOBundleEvent\SitemapPopulateEvent;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Registering services tagged with seo.sitemap.listener as actual event listeners.
@@ -35,7 +36,7 @@ class AddSitemapListenersPass implements CompilerPassInterface
             }
             $definition->addMethodCall(
                 'addListenerService',
-                array(SitemapPopulateEvent::ON_SITEMAP_POPULATE, array($id, 'populateSitemap'))
+                [SitemapPopulateEvent::ON_SITEMAP_POPULATE, [$id, 'populateSitemap']]
             );
         }
     }

@@ -2,10 +2,10 @@
 
 namespace Alpixel\Bundle\SEOBundle\Service;
 
+use Alpixel\Bundle\SEOBundle\Sitemap;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Alpixel\Bundle\SEOBundle\Sitemap;
 
 /**
  * Sitemap Manager service.
@@ -25,7 +25,7 @@ class Generator extends AbstractGenerator
      * @param int                      $itemsBySet
      * @param RouterInterface          $router
      * @param Cache|null               $cache
-     * @param integer|null             $cacheTtl
+     * @param int|null                 $cacheTtl
      */
     public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null, $itemsBySet = null)
     {
@@ -91,7 +91,7 @@ class Generator extends AbstractGenerator
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
         return new Sitemap\Urlset(
-            $this->router->generate('seo_sitemap_section', array('name' => $name, '_format' => 'xml'), true),
+            $this->router->generate('seo_sitemap_section', ['name' => $name, '_format' => 'xml'], true),
             $lastmod
         );
     }
