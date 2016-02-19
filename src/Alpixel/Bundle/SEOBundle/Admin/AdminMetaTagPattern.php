@@ -18,7 +18,6 @@ class AdminMetaTagPattern extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        // to remove a single route
         $collection->remove('create');
         $collection->remove('show');
     }
