@@ -14,7 +14,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
     const LIMIT_ITEMS = 1000;
 
     protected $imageXml = '';
-    protected $customNamespaces = array('image' => 'http://www.google.com/schemas/sitemap-image/1.1');
+    protected $customNamespaces = ['image' => 'http://www.google.com/schemas/sitemap-image/1.1'];
     protected $limitItemsReached = false;
     protected $countItems = 0;
 

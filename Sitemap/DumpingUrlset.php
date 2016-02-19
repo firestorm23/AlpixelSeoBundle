@@ -21,8 +21,8 @@ class DumpingUrlset extends Urlset
      * Saves prepared (in a temporary file) sitemap to target dir
      * Basename of sitemap location is used (as they should always match).
      *
-     * @param string  $targetDir Directory where file should be saved
-     * @param Boolean $gzip
+     * @param string $targetDir Directory where file should be saved
+     * @param bool   $gzip
      */
     public function save($targetDir, $gzip = false)
     {

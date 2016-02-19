@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 
 use Alpixel\Bundle\SEOBundleSitemap\Utils;
@@ -31,7 +30,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $customNamespaces = array('news' => 'http://www.google.com/schemas/sitemap-news/0.9');
+    protected $customNamespaces = ['news' => 'http://www.google.com/schemas/sitemap-news/0.9'];
 
     /**
      * @var string
@@ -76,12 +75,12 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    private $keywords = array();
+    private $keywords = [];
 
     /**
      * @var array
      */
-    private $stockTickers = array();
+    private $stockTickers = [];
 
     /**
      * @param Url       $urlDecorated
@@ -152,7 +151,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function setAccess($access)
     {
-        if ($access && !in_array($access, array(self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION))) {
+        if ($access && !in_array($access, [self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION])) {
             throw new Exception\GoogleNewsUrlException(sprintf('The parameter %s must be a valid access. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078', $access));
         }
         $this->access = $access;
@@ -213,7 +212,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function setPublicationDateFormat($publicationDateFormat)
     {
-        if ($publicationDateFormat && !in_array($publicationDateFormat, array(self::DATE_FORMAT_DATE, self::DATE_FORMAT_DATE_TIME))) {
+        if ($publicationDateFormat && !in_array($publicationDateFormat, [self::DATE_FORMAT_DATE, self::DATE_FORMAT_DATE_TIME])) {
             throw new Exception\GoogleNewsUrlException(sprintf('The parameter %s must be a valid date format. See https://support.google.com/webmasters/answer/74288?hl=en', $publicationDateFormat));
         }
         $this->publicationDateFormat = $publicationDateFormat;

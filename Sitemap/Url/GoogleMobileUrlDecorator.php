@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 
 /**
@@ -23,7 +22,7 @@ class GoogleMobileUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $customNamespaces = array('mobile' => 'http://www.google.com/schemas/sitemap-mobile/1.0');
+    protected $customNamespaces = ['mobile' => 'http://www.google.com/schemas/sitemap-mobile/1.0'];
 
     /**
      * add mobile element before the closing tag.

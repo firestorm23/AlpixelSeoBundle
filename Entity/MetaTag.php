@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MetaTag extends BaseMetaTag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="tag_id", type="integer", nullable=false)
@@ -22,7 +22,7 @@ class MetaTag extends BaseMetaTag
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="url", type="text", nullable=false)
      */
@@ -38,7 +38,7 @@ class MetaTag extends BaseMetaTag
     /**
      * Gets the value of id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -48,7 +48,7 @@ class MetaTag extends BaseMetaTag
     /**
      * Sets the value of id.
      *
-     * @param integer $id the id
+     * @param int $id the id
      *
      * @return self
      */
@@ -59,11 +59,10 @@ class MetaTag extends BaseMetaTag
         return $this;
     }
 
-
     /**
      * Gets the value of url.
      *
-     * @return integer
+     * @return int
      */
     public function getUrl()
     {
@@ -73,7 +72,7 @@ class MetaTag extends BaseMetaTag
     /**
      * Sets the value of url.
      *
-     * @param integer $url the url
+     * @param int $url the url
      *
      * @return self
      */

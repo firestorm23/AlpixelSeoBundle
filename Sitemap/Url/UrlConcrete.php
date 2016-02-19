@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 
 use Alpixel\Bundle\SEOBundle\Sitemap\Utils;
@@ -95,7 +94,7 @@ class UrlConcrete implements UrlInterface
     {
         if (!in_array(
             $changefreq,
-            array(
+            [
                 self::CHANGEFREQ_ALWAYS,
                 self::CHANGEFREQ_HOURLY,
                 self::CHANGEFREQ_DAILY,
@@ -104,7 +103,7 @@ class UrlConcrete implements UrlInterface
                 self::CHANGEFREQ_YEARLY,
                 self::CHANGEFREQ_NEVER,
                 null,
-            )
+            ]
         )) {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option changefreq. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $changefreq));
         }
@@ -183,6 +182,6 @@ class UrlConcrete implements UrlInterface
      */
     public function getCustomNamespaces()
     {
-        return array();
+        return [];
     }
 }

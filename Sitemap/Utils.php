@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap;
 
 use Alpixel\Bundle\SEOBundleException\Exception;
@@ -29,9 +28,9 @@ class Utils
      *
      * @param string $name
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public static function getSetMethod($object, $name)
     {
@@ -49,9 +48,9 @@ class Utils
      *
      * @param string $name
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public static function getGetMethod($object, $name)
     {

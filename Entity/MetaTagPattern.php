@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MetaTagPattern extends BaseMetaTag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="tag_id", type="integer", nullable=false)
@@ -22,14 +22,14 @@ class MetaTagPattern extends BaseMetaTag
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="controller", type="string", unique=false, nullable=false)
      */
     protected $controller;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entity_class", type="string", unique=false, nullable=false)
      */
@@ -38,7 +38,7 @@ class MetaTagPattern extends BaseMetaTag
     /**
      * Gets the value of id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -48,7 +48,7 @@ class MetaTagPattern extends BaseMetaTag
     /**
      * Sets the value of id.
      *
-     * @param integer $id the id
+     * @param int $id the id
      *
      * @return self
      */
@@ -68,11 +68,10 @@ class MetaTagPattern extends BaseMetaTag
         return new $this->entityClass();
     }
 
-
     /**
      * Gets the value of entityClass.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityClass()
     {
@@ -82,7 +81,7 @@ class MetaTagPattern extends BaseMetaTag
     /**
      * Sets the value of entityClass.
      *
-     * @param integer $entityClass the entity class
+     * @param int $entityClass the entity class
      *
      * @return self
      */
@@ -96,7 +95,7 @@ class MetaTagPattern extends BaseMetaTag
     /**
      * Gets the value of controller.
      *
-     * @return integer
+     * @return int
      */
     public function getController()
     {
@@ -106,7 +105,7 @@ class MetaTagPattern extends BaseMetaTag
     /**
      * Sets the value of controller.
      *
-     * @param integer $controller the controller
+     * @param int $controller the controller
      *
      * @return self
      */

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 
 /**
@@ -25,7 +24,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $customNamespaces = array('xhtml' => 'http://www.w3.org/1999/xhtml');
+    protected $customNamespaces = ['xhtml' => 'http://www.w3.org/1999/xhtml'];
 
     /**
      * @var string

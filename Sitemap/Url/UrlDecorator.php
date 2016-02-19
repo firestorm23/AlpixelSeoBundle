@@ -10,7 +10,7 @@ namespace Alpixel\Bundle\SEOBundle\Sitemap\Url;
 abstract class UrlDecorator implements UrlInterface
 {
     protected $urlDecorated;
-    protected $customNamespaces = array();
+    protected $customNamespaces = [];
 
     /**
      * @param Url $urlDecorated

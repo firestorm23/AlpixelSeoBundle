@@ -2,11 +2,11 @@
 
 namespace Alpixel\Bundle\SEOBundle\Service;
 
+use Alpixel\Bundle\SEOBundle\Sitemap\DumpingUrlset;
 use Alpixel\Bundle\SEOBundleDependencyInjection\Configuration;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Alpixel\Bundle\SEOBundle\Sitemap\DumpingUrlset;
 
 /**
  * Service for dumping sitemaps into static files.
@@ -44,7 +44,7 @@ class Dumper extends AbstractGenerator
      * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
      * @param Filesystem               $filesystem Symfony's Filesystem
      * @param $sitemapFilePrefix
-     * @param int                      $itemsBySet
+     * @param int $itemsBySet
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
@@ -67,9 +67,9 @@ class Dumper extends AbstractGenerator
      *
      * @return array|bool
      */
-    public function dump($targetDir, $host, $section = null, array $options = array())
+    public function dump($targetDir, $host, $section = null, array $options = [])
     {
-        $options = array_merge(array('gzip' => false), $options);
+        $options = array_merge(['gzip' => false], $options);
 
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
@@ -131,7 +131,7 @@ class Dumper extends AbstractGenerator
     {
         $this->filesystem->remove($this->tmpFolder);
         $this->root = null;
-        $this->urlsets = array();
+        $this->urlsets = [];
     }
 
     /**
@@ -139,17 +139,17 @@ class Dumper extends AbstractGenerator
      *
      * @param $filename
      *
-     * @return array
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return array
      */
     protected function loadCurrentSitemapIndex($filename)
     {
         if (!file_exists($filename)) {
-            return array();
+            return [];
         }
 
-        $urlsets = array();
+        $urlsets = [];
         $index = simplexml_load_file($filename);
         foreach ($index->children() as $child) {
             if ($child->getName() == 'sitemap') {
@@ -193,7 +193,7 @@ class Dumper extends AbstractGenerator
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
-        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, array('override' => true));
+        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, ['override' => true]);
         $this->cleanup();
     }
 
