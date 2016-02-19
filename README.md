@@ -84,6 +84,8 @@ If you have meta tags which need to be defined from entities value, you can use 
 
 
 ```php
+    use Alpixel\Bundle\SEOBundle\Annotation\MetaTag;
+    ...
 
     /**
      * @Route("/paupiette")
