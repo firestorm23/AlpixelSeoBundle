@@ -4,13 +4,14 @@ namespace Alpixel\Bundle\SEOBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Alpixel\Bundle\SEOBundle\Form\SlugForm;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminSlugController extends CRUDController
 {
 
     const MAX_ELEMENTS_PER_PAGE = 100;
 
-    public function listAction()
+    public function listAction(Request $request = null)
     {
         if (false === $this->admin->isGranted('LIST')) {
             throw new AccessDeniedException();
@@ -91,6 +92,6 @@ class AdminSlugController extends CRUDController
             'objects'    => $objects,
             'form'       => $form->createView(),
             'pagination' => array($previous, $next),
-        ));
+        ), null, $request);
     }
 }
