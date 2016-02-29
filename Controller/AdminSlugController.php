@@ -80,6 +80,7 @@ class AdminSlugController extends CRUDController
                         'Modifications enregistrées'
                     )
                 );
+
                 return true;
             }
         }

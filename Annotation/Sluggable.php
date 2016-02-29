@@ -6,7 +6,7 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * The Sluggable annotation class authorize a manual
- * update of the slug from the administration interface
+ * update of the slug from the administration interface.
  *
  * @Annotation
  * @Target("CLASS")
@@ -14,4 +14,3 @@ use Doctrine\Common\Annotations\Annotation;
 class Sluggable extends Annotation
 {
 }
-
