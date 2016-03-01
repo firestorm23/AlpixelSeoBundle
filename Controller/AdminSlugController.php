@@ -2,13 +2,15 @@
 
 namespace Alpixel\Bundle\SEOBundle\Controller;
 
+use Alpixel\Bundle\SEOBundle\Annotation\Reader\SluggableReader;
 use Alpixel\Bundle\SEOBundle\Form\SlugForm;
+use Doctrine\ORM\EntityManager;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminSlugController extends CRUDController
 {
-    const MAX_ELEMENTS_PER_PAGE = 100;
+    const MAX_ELEMENTS_PER_PAGE = 50;
 
     public function listAction(Request $request = null)
     {
@@ -16,19 +18,25 @@ class AdminSlugController extends CRUDController
             throw new AccessDeniedException();
         }
 
-        $entities = [];
         $entityManager = $this->getDoctrine()->getManager();
-        $meta = $entityManager->getMetadataFactory()->getAllMetadata();
-
-        foreach ($meta as $m) {
-            $inClass = in_array('Alpixel\\Bundle\\SEOBundle\\Entity\\SluggableTrait', class_uses($m->getName()));
-            $hasInterface = in_array('Alpixel\\Bundle\\SEOBundle\\Entity\\SluggableInterface', class_implements($m->getName()));
-            if ($inClass || $hasInterface) {
-                $entities[] = $m->getName();
-            }
+        $entities = $this->getSluggableEntities($entityManager);
+        $objects = $this->resolveSluggableEntities($request, $entityManager, $entities);
+        $form = $this->slugForm($request, $entityManager, $objects);
+        if ($form === true) {
+            return $this->redirect($request->getRequestUri());
         }
 
-        $page = (int) $this->get('request')->query->get('page');
+        return $this->render('SEOBundle:admin:pages/list.html.twig', [
+            'action'     => 'list',
+            'objects'    => $objects,
+            'form'       => $form->createView(),
+            'pagination' => $this->getPagination($request),
+        ], null, $request);
+    }
+
+    private function getPagination(Request $request = null)
+    {
+        $page = $request->query->get('page');
 
         if ($page <= 0) {
             $page = 1;
@@ -45,25 +53,15 @@ class AdminSlugController extends CRUDController
             $next = $page + 1;
         }
 
-        $objects = [];
-        foreach ($entities as $entity) {
-            $founds = $entityManager
-                        ->getRepository($entity)
-                        ->createQueryBuilder('e')
-                        ->setFirstResult(($page - 1) * self::MAX_ELEMENTS_PER_PAGE)
-                        ->setMaxResults(self::MAX_ELEMENTS_PER_PAGE)
-                        ->getQuery()
-                        ->getResult();
-            foreach ($founds as $found) {
-                $objects[] = $found;
-            }
-        }
+        return ['previous' => $previous, 'next' => $next];
+    }
 
+    private function slugForm(Request $request = null, EntityManager $entityManager, $objects = [])
+    {
         $form = $this->createForm(new SlugForm($objects));
-        $request = $this->get('request');
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 foreach ($objects as $object) {
@@ -82,14 +80,50 @@ class AdminSlugController extends CRUDController
                         'Modifications enregistrées'
                     )
                 );
+
+                return true;
             }
         }
 
-        return $this->render('SEOBundle:admin:pages/list.html.twig', [
-            'action'     => 'list',
-            'objects'    => $objects,
-            'form'       => $form->createView(),
-            'pagination' => [$previous, $next],
-        ], null, $request);
+        return $form;
+    }
+
+    private function getSluggableEntities(EntityManager $entityManager)
+    {
+        $entities = [];
+        $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
+        $sluggableReader = new SluggableReader();
+        foreach ($metadata as $class) {
+            $fqcn = $class->getName();
+            if ($sluggableReader->hasAnnotation($fqcn)) {
+                $entities[] = $class->getName($fqcn);
+            }
+        }
+
+        return $entities;
+    }
+
+    private function resolveSluggableEntities(Request $request = null, EntityManager $entityManager, $entities = [])
+    {
+        $page = $request->query->get('page');
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $objects = [];
+        foreach ($entities as $entity) {
+            $founds = $entityManager
+                ->getRepository($entity)
+                ->createQueryBuilder('e')
+                ->setFirstResult(($page - 1) * self::MAX_ELEMENTS_PER_PAGE)
+                ->setMaxResults(self::MAX_ELEMENTS_PER_PAGE)
+                ->getQuery()
+                ->getResult();
+            foreach ($founds as $found) {
+                $objects[] = $found;
+            }
+        }
+
+        return $objects;
     }
 }

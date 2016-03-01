@@ -2,6 +2,7 @@ parameters:
     seo.sitemap.generator.class: Alpixel\Bundle\SEOBundle\Service\Generator
     seo.sitemap.dumper.class: Alpixel\Bundle\SEOBundle\Service\Dumper
     seo.sitemap.routing_loader.class: Alpixel\Bundle\SEOBundle\Routing\SitemapRoutingLoader
+    seo.extension.md5.class: Alpixel\Bundle\SEOBundle\Twig\SEOUtilsExtension
 
 services:
     admin.seo.tags.patterns:
@@ -45,8 +46,19 @@ services:
 
     seo.sitemap.generator:
         class: %seo.sitemap.generator.class%
-        arguments: ['@event_dispatcher', '@router', '@?liip_doctrine_cache.ns.seo.sitemap', '%seo.sitemap.timetolive%', '%seo.sitemap.items_by_set%']
+        arguments:
+            - "@event_dispatcher"
+            - "@router"
+            - "@?liip_doctrine_cache.ns.seo.sitemap"
+            - "%seo.sitemap.timetolive%"
+            - "%seo.sitemap.items_by_set%"
 
     seo.sitemap.dumper:
         class: %seo.sitemap.dumper.class%
-        arguments: ['@event_dispatcher', '@filesystem', '%seo.sitemap.file_prefix%', '%seo.sitemap.items_by_set%']
+        arguments: ["@event_dispatcher", "@filesystem", "%seo.sitemap.file_prefix%", "%seo.sitemap.items_by_set%"]
+
+    seo.extension.md5:
+        class: "%seo.extension.md5.class%"
+        public: false
+        tags:
+            - { name: twig.extension }

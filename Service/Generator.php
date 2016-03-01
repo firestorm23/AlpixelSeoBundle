@@ -77,8 +77,6 @@ class Generator extends AbstractGenerator
         if (array_key_exists($name, $this->urlsets)) {
             return $this->urlsets[$name];
         }
-
-        return;
     }
 
     /**

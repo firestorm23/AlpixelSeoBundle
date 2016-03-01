@@ -25,40 +25,38 @@ file that was distributed with this source code.
                 </div>
             {% else %}
                 {{form_start(form)}}
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr class="sonata-ba-list-field-header">
-                            <th>Objet</th>
-                            <th>ID</th>
-                            <th>Titre</th>
-                            <th>URL</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for object in objects %}
-                            <tr>
-                                <td>{{object.className}}</td>
-                                <td>{{object.id}}</td>
-                                <td>{{object}}</td>
-                                <td>{{url(object.routeName, object.uriParameters)}}</td>
-                                <td>
-                                    {{form_errors(form['slug_'~(object.className~object.id)|md5])}}
-                                    {{form_widget(form['slug_'~(object.className~object.id)|md5])}}
-                                </td>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr class="sonata-ba-list-field-header">
+                                <th>ID</th>
+                                <th>Objet</th>
+                                <th>Titre</th>
+                                <th>URL</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <br>
-                <div>
-                    {% set current_route = app.request.attributes.get('_route') %}
-                    <a href="{{ path(current_route, {'page':  pagination.previous}) }}" class="btn btn-primary">Précédent</a>&nbsp;|&nbsp;
-                    <a href="{{ path(current_route, {'page':  pagination.next}) }}" class="btn btn-primary">Suivant</a>
-                </div>
-                <br />
-                <p><button type="submit" class="btn btn-large btn-success">Sauvegarder les modifications</button></p>
+                        </thead>
+
+                        <tbody>
+                            {% for object in objects %}
+                                <tr>
+                                    <td>{{object.id}}</td>
+                                    <td>{{object|class_name}}</td>
+                                    <td>{{object}}</td>
+                                    <td>
+                                        {{form_errors(form['slug_'~(object|class_name~object.id)|md5])}}
+                                        {{form_widget(form['slug_'~(object|class_name~object.id)|md5], {'attr': {'style' : 'width:100%;'}})}}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br>
+                    <div>
+                        {% set current_route = app.request.attributes.get('_route') %}
+                        <a href="{{ path(current_route, {'page':  pagination.previous}) }}" class="btn btn-primary">Précédent</a>&nbsp;|&nbsp;
+                        <a href="{{ path(current_route, {'page':  pagination.next}) }}" class="btn btn-primary">Suivant</a>
+                    </div>
+                    <br />
+                    <p><button type="submit" class="btn btn-large btn-success">Sauvegarder les modifications</button></p>
                 {{form_end(form)}}
             {% endif %}
         </div>
