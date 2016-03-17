@@ -23,13 +23,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Slugs'}
 
-    seo.not_found_redirect:
-       class: Alpixel\Bundle\SEOBundle\Listener\NotFoundRedirectListener
-       calls:
-            - [setContainer, ["@service_container"] ]
-       tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-
     seo.tags:
        class: Alpixel\Bundle\SEOBundle\Service\MetaTagService
        arguments: [@sonata.seo.page, @annotation_reader, @doctrine, @security.context]
