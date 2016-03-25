@@ -10,6 +10,7 @@ use Doctrine\Common\Annotations\Reader;
 use Sonata\SeoBundle\Seo\SeoPage;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class MetaTagService
@@ -17,14 +18,12 @@ class MetaTagService
     protected $doctrine;
     protected $sonataSEO;
     protected $annotationReader;
-    protected $securityContext;
 
-    public function __construct(SeoPage $page, Reader $reader, Registry $doctrine, SecurityContext $securityContext = null)
+    public function __construct(SeoPage $page, Reader $reader, Registry $doctrine)
     {
         $this->annotationReader = $reader;
         $this->doctrine = $doctrine;
         $this->sonataSEO = $page;
-        $this->securityContext = $securityContext;
     }
 
     public function onControllerFound(FilterControllerEvent $event)

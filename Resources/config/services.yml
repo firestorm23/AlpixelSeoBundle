@@ -25,7 +25,7 @@ services:
 
     seo.tags:
        class: Alpixel\Bundle\SEOBundle\Service\MetaTagService
-       arguments: [@sonata.seo.page, @annotation_reader, @doctrine, @security.context]
+       arguments: [@sonata.seo.page, @annotation_reader, @doctrine, @security.token_storage]
        tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onControllerFound, priority:-255 }
        calls:
