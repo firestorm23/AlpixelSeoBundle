@@ -18,8 +18,7 @@ class AdminMetaTagPattern extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->remove('create');
-        $collection->remove('show');
+        $collection->clearExcept(['edit', 'list']);
     }
 
     /**
@@ -42,10 +41,7 @@ class AdminMetaTagPattern extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, [
-                'label' => 'ID',
-            ])
-            ->addIdentifier('title', null, [
+            ->add('title', null, [
                 'label' => 'Titre',
             ])
             ->add('metaTitle', null, [
@@ -56,6 +52,11 @@ class AdminMetaTagPattern extends Admin
             ])
             ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
+            ])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'edit'   => [],
+                ],
             ]);
     }
 

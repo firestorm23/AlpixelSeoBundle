@@ -55,16 +55,15 @@ class MetaTagService
                     }
 
                     $class = new \ReflectionClass($object);
-
                     $exists = $this
-                                ->doctrine
-                                ->getManager()
-                                ->getRepository('SEOBundle:MetaTagPattern')
-                                ->findOneBy([
-                                    'controller'    => $controller,
-                                    'entityClass'   => $class->getName(),
-                                ]);
-
+                        ->doctrine
+                        ->getManager()
+                        ->getRepository('SEOBundle:MetaTagPattern')
+                        ->findOneBy([
+                            'controller' => $controller,
+                            'entityClass' => $class->getName(),
+                        ]);
+                    
                     if (!is_null($exists)) {
                         $title = $this->getMeta('title', $object);
                         if ($title !== '') {
@@ -95,12 +94,12 @@ class MetaTagService
         }
 
         $optim = $this
-                    ->doctrine
-                    ->getManager()
-                    ->getRepository('SEOBundle:MetaTag')
-                    ->findOneBy([
-                        'url'       => $path,
-                    ]);
+            ->doctrine
+            ->getManager()
+            ->getRepository('SEOBundle:MetaTag')
+            ->findOneBy([
+                'url' => $path,
+            ]);
 
         if ($optim !== null) {
             if ($optim->getMetaTitle() !== null) {
@@ -127,9 +126,9 @@ class MetaTagService
     {
         //Fetch the placeholders
         $pattern = $this->doctrine
-                         ->getManager()
-                         ->getRepository('SEOBundle:MetaTagPattern')
-                         ->findOneByEntityClass(get_class($object));
+            ->getManager()
+            ->getRepository('SEOBundle:MetaTagPattern')
+            ->findOneByEntityClass(get_class($object));
 
         if (empty($pattern)) {
             return;
@@ -140,13 +139,13 @@ class MetaTagService
         switch ($type) {
             case 'title':
                 return strtr($pattern->getMetaTitle(), $placeholders);
-            break;
+                break;
             case 'description':
                 return strtr($pattern->getMetaDescription(), $placeholders);
-            break;
+                break;
             case 'keywords':
                 return strtr($pattern->getMetaKeywords(), $placeholders);
-            break;
+                break;
         }
     }
 
@@ -154,8 +153,8 @@ class MetaTagService
     {
         if (!is_null($pattern->getEntityClass())) {
             return $pattern
-                    ->instantiate()
-                    ->getPlaceholders();
+                ->instantiate()
+                ->getPlaceholders();
         }
     }
 
