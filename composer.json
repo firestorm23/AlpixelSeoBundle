@@ -20,7 +20,8 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.3.0",
-    "sonata-project/seo-bundle": "~1.1"
+    "sonata-project/seo-bundle": "~1.1",
+    "presta/sitemap-bundle": "~.1.4"
   },
   "autoload": {
     "psr-4": {
