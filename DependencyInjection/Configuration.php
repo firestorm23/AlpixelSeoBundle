@@ -2,7 +2,6 @@
 
 namespace Alpixel\Bundle\SEOBundle\DependencyInjection;
 
-use Alpixel\Bundle\SEOBundle\Sitemap\XmlConstraint;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,38 +12,13 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    const DEFAULT_FILENAME = 'sitemap';
-
     /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('seo');
-
-        $rootNode
-            ->children()
-                ->scalarNode('sitemap_timetolive')
-                    ->defaultValue('3600')
-                ->end()
-                ->scalarNode('sitemap_base_url')
-                    ->defaultValue('')
-                ->end()
-                ->scalarNode('sitemap_file_prefix')
-                    ->defaultValue(self::DEFAULT_FILENAME)
-                    ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
-                ->end()
-                ->scalarNode('sitemap_items_by_set')
-                    // Add one to the limit items value because it's an
-                    // index value (not a quantity)
-                    ->defaultValue(XmlConstraint::LIMIT_ITEMS + 1)
-                    ->info('The maximum number of items allowed in single sitemap.')
-                ->end()
-                ->scalarNode('sitemap_route_annotation_listener')
-                    ->defaultTrue()
-                ->end()
-            ->end();
+        $rootNode = $treeBuilder->root('alpixel_seo');
 
         return $treeBuilder;
     }

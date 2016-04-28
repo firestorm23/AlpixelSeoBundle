@@ -1,9 +1,0 @@
-parameters:
-    seo.sitemap.eventlistener.route_annotation.class: Alpixel\Bundle\SEOBundleEventListener\RouteAnnotationEventListener
-
-services:
-    seo.sitemap.eventlistener.route_annotation:
-        class: %seo.sitemap.eventlistener.route_annotation.class%
-        tags:
-            - { name: seo.sitemap.listener }
-        arguments: ['@router']

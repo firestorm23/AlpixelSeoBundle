@@ -10,8 +10,6 @@ use Doctrine\Common\Annotations\Reader;
 use Sonata\SeoBundle\Seo\SeoPage;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class MetaTagService
 {
@@ -48,7 +46,7 @@ class MetaTagService
                 if ($annotation instanceof SEOAnnotation\MetaTag) {
                     $request = $controllerData[0]->getRequest();
                     $controller = $request->get('_controller');
-                    $object = $request->get($annotation->value);
+                    $object = $request->attributes->get($annotation->value);
 
                     if (empty($object)) {
                         continue;
@@ -60,10 +58,10 @@ class MetaTagService
                         ->getManager()
                         ->getRepository('SEOBundle:MetaTagPattern')
                         ->findOneBy([
-                            'controller' => $controller,
+                            'controller'  => $controller,
                             'entityClass' => $class->getName(),
                         ]);
-                    
+
                     if (!is_null($exists)) {
                         $title = $this->getMeta('title', $object);
                         if ($title !== '') {

@@ -11,11 +11,13 @@ use Symfony\Component\Finder\Finder;
 
 class MetaTagCommand extends ContainerAwareCommand
 {
+    protected $savedController = [];
+
     public function configure()
     {
         $this
-            ->setName('seo:metatag:patterns')
-            ->setDescription('Generate patterns in database');
+            ->setName('alpixel:seo:metatag:dump')
+            ->setDescription('Save automatic patterns in database');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -56,19 +58,18 @@ class MetaTagCommand extends ContainerAwareCommand
             // remove class name
             array_pop($namespaceParts);
             $bundleNamespace = implode('\\', $namespaceParts);
-            $rootPath = $this->getContainer()->get('kernel')->getRootDir() . '/../src/';
-            $controllerDir = $rootPath . $bundleNamespace . '/Controller';
+            $rootPath = $this->getContainer()->get('kernel')->getRootDir().'/../src/';
+            $controllerDir = $rootPath.$bundleNamespace.'/Controller';
             $controllerDir = strtr($controllerDir, ['\\' => '/']);
             if (is_dir($controllerDir)) {
                 $finder = new Finder();
                 $files = $finder->in($controllerDir)->name('*.php');
 
                 foreach ($files as $file) {
+                    $filename = basename($file->getFilename(), '.'.$file->getExtension());
+                    $basePath = '\\'.strtr(strtr($file->getPath(), [$rootPath => '']), ['/' => '\\']);
 
-                    $filename = basename($file->getFilename(), '.' . $file->getExtension());
-                    $basePath = "\\" . strtr(strtr($file->getPath(), [$rootPath => '']), ['/' => '\\']);
-
-                    $class = $basePath . "\\" . $filename;
+                    $class = $basePath.'\\'.$filename;
                     $reflectedClass = new \ReflectionClass($class);
 
                     foreach ($reflectedClass->getMethods() as $reflectedMethod) {
@@ -84,6 +85,17 @@ class MetaTagCommand extends ContainerAwareCommand
             }
         }
 
+        //Cleaning up old controllers
+        $patterns = $entityManager
+            ->getRepository('SEOBundle:MetaTagPattern')
+            ->findAll();
+
+        foreach ($patterns as $pattern) {
+            if (!in_array($pattern->getController(), $this->savedController)) {
+                $entityManager->remove($pattern);
+            }
+        }
+
         $entityManager->flush();
     }
 
@@ -94,9 +106,11 @@ class MetaTagCommand extends ContainerAwareCommand
         $exists = $entityManager
             ->getRepository('SEOBundle:MetaTagPattern')
             ->findOneBy([
-                'controller' => $controller,
+                'controller'  => $controller,
                 'entityClass' => $annotation->providerClass,
             ]);
+
+        $this->savedController[] = $controller;
 
         if (is_null($exists)) {
             $pattern = new MetaTagPattern();

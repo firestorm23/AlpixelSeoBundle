@@ -1,0 +1,24 @@
+services:
+    admin.seo.tags.patterns:
+        class: Alpixel\Bundle\SEOBundle\Admin\AdminMetaTagPattern
+        arguments: [~, Alpixel\Bundle\SEOBundle\Entity\MetaTagPattern, "SEOBundle:AdminMetaTagPattern"]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Optimisations automatiques'}
+
+    admin.seo.tags:
+        class: Alpixel\Bundle\SEOBundle\Admin\AdminMetaTag
+        arguments: [~, Alpixel\Bundle\SEOBundle\Entity\MetaTag, "SEOBundle:AdminMetaTag"]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'SEO', label: 'Optimisations manuelles'}
+
+    seo.tags:
+       class: Alpixel\Bundle\SEOBundle\Service\MetaTagService
+       arguments:
+          - "@sonata.seo.page"
+          - "@annotation_reader"
+          - "@doctrine"
+          - "@security.token_storage"
+       tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onControllerFound, priority: -255 }
+       calls:
+            - [setContainer, ["@service_container"] ]
