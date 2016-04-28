@@ -62,6 +62,11 @@ class AdminMetaTag extends Admin
             ])
             ->add('metaKeywords', null, [
                 'label' => 'Meta : mots clefs',
+            ])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'edit'   => [],
+                ],
             ]);
     }
 
