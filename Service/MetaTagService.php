@@ -47,7 +47,7 @@ class MetaTagService
                     $request = $controllerData[0]->getRequest();
                     $controller = $request->get('_controller');
 
-                    $exists = $this
+                    $object = $this
                         ->doctrine
                         ->getManager()
                         ->getRepository('SEOBundle:MetaTagPattern')
@@ -56,7 +56,7 @@ class MetaTagService
                             'entityClass' => $annotation->providerClass,
                         ]);
 
-                    if (!is_null($exists)) {
+                    if (!is_null($object)) {
                         $title = $this->getMeta('title', $object);
                         if ($title !== '') {
                             $this->sonataSEO
