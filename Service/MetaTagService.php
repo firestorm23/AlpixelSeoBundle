@@ -46,20 +46,14 @@ class MetaTagService
                 if ($annotation instanceof SEOAnnotation\MetaTag) {
                     $request = $controllerData[0]->getRequest();
                     $controller = $request->get('_controller');
-                    $object = $request->attributes->get($annotation->value);
 
-                    if (empty($object)) {
-                        continue;
-                    }
-
-                    $class = new \ReflectionClass($object);
                     $exists = $this
                         ->doctrine
                         ->getManager()
                         ->getRepository('SEOBundle:MetaTagPattern')
                         ->findOneBy([
                             'controller'  => $controller,
-                            'entityClass' => $class->getName(),
+                            'entityClass' => $annotation->providerClass,
                         ]);
 
                     if (!is_null($exists)) {
